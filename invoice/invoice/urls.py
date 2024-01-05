@@ -8,7 +8,7 @@ from . import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("check_base/", views.check_base, name="base_template"),
-    path("", include("app.urls")),
+    path("", include("fak_owner.urls")),
 ]
 
 if settings.DEBUG:

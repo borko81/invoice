@@ -1,0 +1,7 @@
+TEST: OwnerBankAccount
+
+CREATE: Owner views
+TEST: Owner
+
+CREATE: Client views
+TESTL Client

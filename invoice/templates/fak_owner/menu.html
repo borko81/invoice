@@ -3,7 +3,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home</a>
+                    <a class="nav-link" href="{% url 'base_template' %}">Home</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="#">Нова фактура</a>
@@ -17,6 +17,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                       <a class="dropdown-item" href="#">Данни на фирмата</a>
+                      <a class="dropdown-item" href="{% url 'fak_owner:bank_list' %}">Банкова сметка</a>
                       <a class="dropdown-item" href="#">Добавя клиент</a>
                     </div>
                   </li>
