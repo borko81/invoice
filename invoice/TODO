@@ -1,7 +1,11 @@
-TEST: OwnerBankAccount
-
-CREATE: Owner views
-TEST: Owner
-
 CREATE: Client views
-TESTL Client
+TEST Client
+
+Models: Fak
+Models: Fak_el
+Create: Fak views
+TEST: Fak
+
+Create: Spravi views
+
+Create: Download Spravi

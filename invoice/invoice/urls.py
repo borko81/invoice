@@ -7,7 +7,7 @@ from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("check_base/", views.check_base, name="base_template"),
+    path("", views.check_base, name="base_template"),
     path("", include("fak_owner.urls")),
 ]
 

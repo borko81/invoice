@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.contrib import messages
 
 from . import models
 from . import forms
@@ -29,6 +30,7 @@ class OwnerBanNew(CreateView):
         return context
 
     def get_success_url(self):
+        messages.success(self.request, "Успешен запис")
         return reverse("fak_owner:bank_list")
 
 
@@ -38,6 +40,7 @@ class OwnerBankEdit(UpdateView):
     form_class = forms.OwnerBankForm
 
     def get_success_url(self):
+        messages.success(self.request, "Успешена редакция")
         return reverse("fak_owner:bank_list")
 
     def get_context_data(self, **kwargs):
@@ -50,10 +53,16 @@ class OwnerBankEdit(UpdateView):
 class OwnerBankDelete(DeleteView):
     template_name = "fak_owner/ownerbank_list.html"
     model = models.OwnerBank
-    success_url = reverse_lazy("fak_owner:bank_list")
 
     def get_context_data(self, **kwargs):
         context = super(OwnerBankDelete, self).get_context_data(**kwargs)
         context["title"] = "DeleteBankAccount"
         context["delete"] = True
         return context
+
+    def get_success_url(self):
+        messages.success(self.request, "Successfully deleted")
+        return reverse("fak_owner:bank_list")
+
+
+# OWner views

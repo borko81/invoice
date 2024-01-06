@@ -1,0 +1,58 @@
+{% extends 'fak_owner/base.html' %}
+
+{% block body %}
+
+{% if not create and not edit and not delete %}
+    <h3>Конфигурация потребител</h3>
+    <p><a href="{% url 'fak_owner:owner_new' %}">Създаи нов потребител</a></p>
+    {% if object_list %}
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th>Име</th>
+                <th>Град</th>
+                <th>Адрес</th>
+                <th>Булстат</th>
+                <th>ДДС Номер</th>
+                <th colspan="2">Операции</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for obj in object_list  %}
+                <tr>
+                    <td>{{obj.full_name}}</td>
+                    <td>{{obj.town}}</td>
+                    <td>{{obj.address}}</td>
+                    <td>{{obj.bulstat}}</td>
+                    <td>{{obj.id_nomer}}</td>
+                    <td><a href="{% url 'fak_owner:owner_edit' obj.id %}" class="btn btn-sm btn-success">Edit</a></td>
+                    <td><a href="{% url 'fak_owner:owner_delete' obj.id %}" class="btn btn-sm btn-danger">Delete</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+    {% elif edit %}
+    <h3>Редакция потребител</h3>
+    <form method="post">{% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Save" class="btn form-control btn-success mt-2">
+    </form>
+    {% elif delete %}
+    <form method="post">{% csrf_token %}
+        <p>Are you sure you want to delete "{{ object }}"?</p>
+        {{ form }}
+        <input type="submit" value="Confirm" class="btn form-control btn-danger">
+    </form>
+    {% else %}
+    <h3>Създаване на нов потребител</h3>
+    <form method="post">{% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Save" class="btn form-control btn-success mt-2">
+    </form>
+{% endif %}
+{% block script %}
+
+{% endblock script %}
+{% endblock body %}
