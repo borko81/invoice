@@ -43,3 +43,7 @@
 .search_by_bulstat {
     outline: none;
 }
+.custom_two_layer_button {
+    display: flex;
+    justify-content: space-between;
+}

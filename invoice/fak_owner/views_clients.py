@@ -1,10 +1,13 @@
 from typing import Any
 from django.urls import reverse
+from django.http import JsonResponse, HttpResponse
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
 
 from . import models
 from . import forms
+
+from .helpers.bulstat_parse import GetDataFromBulstat
 
 
 class ViewAllClients(ListView):
@@ -71,3 +74,15 @@ class ClientDelete(DeleteView):
     def get_success_url(self) -> str:
         messages.success(self.request, "Record was successfully deleted")
         return reverse("fak_owner:clients")
+
+
+def parse_bulstat(request, bulstat):
+    is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
+
+    if is_ajax:
+        if request.method == "GET":
+            data = GetDataFromBulstat(bulstat).parse_data()
+            return JsonResponse(data)
+        return JsonResponse({"status": "Invalid request"}, status=400)
+    else:
+        return JsonResponse({"status": "Invalid request"}, status=400)

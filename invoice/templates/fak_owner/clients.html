@@ -71,7 +71,10 @@
     <h3>Създаване на нов клиент</h3>
     <form method="post">{% csrf_token %}
         {{ form }}
-        <input type="submit" value="Save" class="btn form-control btn-success mt-2">
+        <div class="custom_two_layer_button">
+            <input type="submit" value="Запис" class="btn form-control btn-success mt-2">
+            <button class="btn form-control btn-success mt-2 ml-2" id="parse_putton">Въведи булстат, изтегли данни от интернет</button>
+        </div>
     </form>
 {% endif %}
 {% block script %}
@@ -93,6 +96,36 @@
             }
         }
     }
+
+    let web_parse_button = document.getElementById("parse_putton");
+    web_parse_button.addEventListener("click", function(event) {
+        event.preventDefault()
+        let bulsat_search = document.getElementById("id_bulstat").value
+        if (!bulsat_search) {
+            alert("Въведете булстат в полето за да ползвата парсера!")
+        } else {
+            var URL = "{%  url 'fak_owner:bulstat_parse' bulstat=0 %}".replace('0', bulsat_search) ;
+            var name = document.getElementById("id_client_name")
+            var town = document.getElementById("id_town")
+            var address = document.getElementById("id_address")
+            var id_num = document.getElementById("id_id_nomer")
+            var mol = document.getElementById("id_mol")
+            fetch(URL, {
+                    method: "GET",
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    name.value = data['client_name']
+                    town.value = data['town']
+                    address.value = data['address']
+                    id_num.value = data['id_nomer']
+                    mol.value = data['mol']
+            });
+        }
+    })
 </script>
 {% endblock script %}
 {% endblock body %}

@@ -30,4 +30,9 @@ urlpatterns = [
         clients_views.ClientDelete.as_view(),
         name="client_delete",
     ),
+    path(
+        "parse_data_from_web/<str:bulstat>/",
+        clients_views.parse_bulstat,
+        name="bulstat_parse",
+    ),
 ]
