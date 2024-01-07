@@ -1,0 +1,98 @@
+{% extends 'fak_owner/base.html' %}
+
+{% block body %}
+
+{% if not create and not edit and not delete %}
+    <div class="h_and_menu">
+    <h3>Конфигурация Клиенти</h3>
+    <ul class="custom_ul mb-2">
+        <li>
+            <a href="{% url 'fak_owner:client_new' %}">Създаи нов клиент</a>
+        </li>
+        <li>
+            <a href="{% url 'fak_owner:clients' %}">Всичко</a>
+        </li>
+        <li>
+            <a href="{% url 'fak_owner:clients' %}?search_field=active">Само активни</a>
+        </li>
+        <li>
+            <a href="{% url 'fak_owner:clients' %}?search_field=unactive">Само неактивни</a>
+        </li>
+    </ul>
+    </div>
+    {% if object_list %}
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th>Име</th>
+                <th>Град</th>
+                <th>Адрес</th>
+                <th>
+                    <input type="text"
+                    name="search_by_bulstat"
+                    placeholder="Булстат"
+                    id="search_by_bulstat" onkeyup="searchFunction()">
+                </th>
+                <th>ДДС No</th>
+                <th>Мол</th>
+                <th colspan="2">Операции</th>
+            </tr>
+        </thead>
+        <tbody id="myTable">
+            {% for obj in object_list  %}
+                <tr class="{{obj.is_deleted}}">
+                    <td>{{obj.client_name}}</td>
+                    <td>{{obj.town|default_if_none:''}}</td>
+                    <td>{{obj.address|default_if_none:''}}</td>
+                    <td>{{obj.bulstat}}</td>
+                    <td>{{obj.id_nomer|default_if_none:''}}</td>
+                    <td>{{obj.mol|default_if_none:''}}</td>
+                    <td><a href="{% url 'fak_owner:client_edit' obj.id %}" class="btn btn-sm btn-success">Edit</a></td>
+                    <td><a href="{% url 'fak_owner:client_delete' obj.id %}" class="btn btn-sm btn-danger">Delete</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+    {% elif edit %}
+    <h3>Редакция потребител</h3>
+    <form method="post">{% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Save" class="btn form-control btn-success mt-2">
+    </form>
+    {% elif delete %}
+    <form method="post">{% csrf_token %}
+        <p>Are you sure you want to delete "{{ object }}"?</p>
+        {{ form }}
+        <input type="submit" value="Confirm" class="btn form-control btn-danger">
+    </form>
+    {% else %}
+    <h3>Създаване на нов клиент</h3>
+    <form method="post">{% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Save" class="btn form-control btn-success mt-2">
+    </form>
+{% endif %}
+{% block script %}
+<script>
+    function searchFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("search_by_bulstat").value
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[3];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.indexOf(input) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+{% endblock script %}
+{% endblock body %}

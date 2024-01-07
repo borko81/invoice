@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views as app_views
 from . import views_owner as owner_views
+from . import views_clients as clients_views
 
 app_name = "fak_owner"
 urlpatterns = [
@@ -17,5 +18,16 @@ urlpatterns = [
     path("owner_edit/<int:pk>/", owner_views.OwnerEdit.as_view(), name="owner_edit"),
     path(
         "owner_delete/<int:pk>/", owner_views.OwnerDelete.as_view(), name="owner_delete"
+    ),
+    # Clients url's
+    path("clients/", clients_views.ViewAllClients.as_view(), name="clients"),
+    path("client_new/", clients_views.ClientNew.as_view(), name="client_new"),
+    path(
+        "client_edit/<int:pk>/", clients_views.ClientEdit.as_view(), name="client_edit"
+    ),
+    path(
+        "client_delete/<int:pk>/",
+        clients_views.ClientDelete.as_view(),
+        name="client_delete",
     ),
 ]

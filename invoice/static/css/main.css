@@ -15,3 +15,31 @@
     background-color: lightcoral;
     color: black;
 }
+
+.True {
+    text-decoration: line-through;
+}
+
+.custom_ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    margin-top: 8px;
+}
+.custom_ul li {
+    display: inline;
+}
+
+.custom_ul li::before {
+    content: "| "
+}
+
+.h_and_menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.search_by_bulstat {
+    outline: none;
+}

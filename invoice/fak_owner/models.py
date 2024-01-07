@@ -42,6 +42,14 @@ class Owner(models.Model):
         return self.full_name
 
 
+class ClientManager(models.Manager):
+    def only_active(self):
+        return self.get_queryset().filter(is_deleted=False)
+
+    def only_unactive(self):
+        return self.get_queryset().filter(is_deleted=True)
+
+
 class Client(models.Model):
     client_name = models.CharField(max_length=52)
     town = models.CharField(max_length=32, null=True, blank=True)
@@ -49,12 +57,19 @@ class Client(models.Model):
     bulstat = models.CharField(max_length=9, unique=True)
     id_nomer = models.CharField(max_length=11, blank=True, null=True)
     mol = models.CharField(max_length=72)
+    is_deleted = models.BooleanField(default=False)
     email = models.EmailField(blank=True, null=True)
     telephone = models.CharField(max_length=15, blank=True, null=True)
-    comemnt = models.CharField(max_length=120, blank=True, null=True)
+    comment = models.CharField(max_length=120, blank=True, null=True)
+
+    objects = models.Manager()
+    filtered_objects = ClientManager()
 
     def __str__(self):
         return self.client_name
 
     class Meta:
         ordering = ["client_name"]
+
+    # def only_not_deleted(self):
+    #     return
