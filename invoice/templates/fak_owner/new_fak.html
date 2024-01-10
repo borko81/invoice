@@ -1,8 +1,64 @@
 {% extends 'fak_owner/base.html' %}
 
+{% block css %}
+<style>
+    .form {
+        width: 100%;
+        margin: 0 auto;
+    }
+    .form_label_and_input > div {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+    .form_label_and_input > label {
+        flex: 1;
+    }
+    .form_label_and_input > input, select {
+        flex: 2;
+    }
+    .action_butons {
+        display: grid;
+        gap: 5px;
+        grid-template-columns: 1fr 1fr;
+    }
+
+</style>
+{% endblock css %}
+
+
 {% block body %}
 <h3>Нова фактура</h3>
+<form action="" method="POST" class="form">
+    {% csrf_token %}
+    <div class="form_label_and_input">
+    {{fak_form}}
+    <table class="table mt-2">
+        <thead class="table-dark">
+            <tr class="product_input">
+                <th>Продукт</th>
+                <th style="width: 5px">Кол</th>
+                <th>ДДС</th>
+                <th>Ед.Цена Брутна</th>
+            </tr>
+        </thead>
+        <tbody id="fak_form_products">
+        <tr class="product_input">
+            {% for product in produkt_form %}
+                <td>{{product}}</td>
+            {% endfor %}
+        </tr>
+    </tbody>
+    </table>
+    <!-- {{produkt_form}} -->
+    </div>
+    <div class="action_butons">
 
-{% block script %}
-{% endblock script %}
+        <button id="add_new_row" class="btn btn-sm btn-success mb-2">Добави ред</button>
+
+        <button id="remove_last_row" class="btn btn-sm btn-danger mb-2">Премахни ред</button>
+
+    </div>
+        <input type="submit" value="Запис" class="btn btn-sm btn-success form-control">
+</form>
 {% endblock body %}

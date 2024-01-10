@@ -11,9 +11,10 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <script src="{% static 'js/main.js' %}"></script>
     <title>{% if title %}{{title}}{% else %}Document{% endif %}</title>
+    {% block css %}{% endblock css %}
 </head>
 <body>
-    <div class="container">
+    <div class="custom_container">
         {% include 'fak_owner/menu.html' %}
         <div class="main">
             {% include 'fak_owner/messages.html' %}
@@ -31,7 +32,21 @@
                 message.style.display = 'none'
             }, 3000 );
         }
-    
+        /* Добава премахва ред в нови продуки форма */
+        $("#add_new_row").click(function () {
+        $trLast = $("#fak_form_products").find("tr:last")
+        $trNew = $trLast.clone();
+        $trNew.find("input").val('')
+        $trLast.after($trNew)
+        })
+
+
+        $("#remove_last_row").click(function () {
+        $trRows = $("#fak_form_products").find("tr")
+        if($trRows.length > 1) {
+            $("#fak_form_products").find("tr:last").remove()
+        }
+        })
     </script>
 </body>
 </html>

@@ -1,7 +1,41 @@
 from django.db import models
 
+from decimal import Decimal
+from datetime import datetime
+
+
+FAK_TYPE = (
+    ("Фактура", "Фактура"),
+    ("Проформа фактура", "Проформа фактура"),
+    ("Кредитно известие", "Кредитно известие"),
+)
+
+DUEDATE = (
+    ("now", "now"),
+    ("14 days", "14 days"),
+    ("30 days", "30 days"),
+    ("60 days", "60 days"),
+)
+
+STATUS = (
+    ("CURRENT", "CURRENT"),
+    ("EMAIL_SENT", "EMAIL_SENT"),
+    ("OVERDUE", "OVERDUE"),
+    ("PAID", "PAID"),
+    ("DELETED", "DELETED"),
+)
+
+PAY_TIP = (
+    ("Брой", "Брой"),
+    ("Карта", "Карта"),
+    ("Банка", "Банка"),
+)
+
+DDS = ((0, 0), (9, 9), (20, 20))
+
 
 class OwnerBank(models.Model):
+    DEFAULT_PK = 1
     banka_name = models.CharField(max_length=52)
     banka_name_lat = models.CharField(max_length=52, null=True, blank=True)
     kod = models.CharField(max_length=12)
@@ -73,3 +107,77 @@ class Client(models.Model):
 
     # def only_not_deleted(self):
     #     return
+
+
+class FakModels(models.Model):
+    bank = models.ForeignKey(
+        OwnerBank, on_delete=models.CASCADE, default=OwnerBank.DEFAULT_PK
+    )
+    # owner =
+    fak_number = models.CharField(max_length=10, blank=True, null=True)
+    fak_tip = models.CharField(max_length=32, choices=FAK_TYPE, default="Фактура")
+    pay_tip = models.CharField(max_length=32, choices=PAY_TIP, default="Брой")
+    client = models.ForeignKey(Client, on_delete=models.DO_NOTHING)
+    suma = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    dds = models.IntegerField(choices=DDS, default=20)
+    cena_netna_total = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+    dds_suma = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+    due_date = models.CharField(max_length=10, choices=DUEDATE, default="now")
+    status = models.CharField(max_length=32, choices=STATUS, default="CURRENT")
+    poluchena_ot = models.CharField(max_length=52)
+    date_sdelka = models.DateField(auto_now_add=False)
+    date_created = models.DateField(blank=True, null=True)
+    comment = models.CharField(max_length=120, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.fak_number)
+
+    def save(self, *args, **kwargs):
+        self.bank_name = self.bank
+        if not self.pk:
+            if self.fak_tip == "Фактура" or self.fak_tip == "Кредитно известие":
+                self.fak_number = str(int(self.bank_name.last_fak_number) + 1).zfill(10)
+                self.bank_name.last_fak_number = self.fak_number
+                self.bank.save()
+            elif self.fak_tip == "Проформа":
+                self.fak_number = str(int(self.bank_name.last_pr_number) + 1).zfill(10)
+                self.bank_name.last_pr_number = self.fak_number
+                self.bank.save()
+        self.date_created = datetime.now()
+        super().save(*args, **kwargs)
+
+
+class FakElModels(models.Model):
+    # me = [("бр.", "бр"), ("кг.", "кг."), ("л.", "л."), ("пакет", "пакет"), ("т.", "т.")]
+    fak_id = models.ForeignKey(
+        FakModels, on_delete=models.CASCADE, blank=True, null=True
+    )
+    text = models.CharField(max_length=52)
+    kol = models.PositiveIntegerField(default=1)
+    dds = models.IntegerField(choices=DDS, default=20)
+    cena_brutna_ed = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    cena_netna_ed = models.DecimalField(
+        max_digits=9, decimal_places=2, null=True, blank=True
+    )
+    cena_netna_total = models.DecimalField(
+        max_digits=8, decimal_places=2, null=True, blank=True
+    )
+    dds_suma = models.DecimalField(max_digits=8, decimal_places=2, null=2, blank=2)
+    total = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.total = self.kol * self.cena_brutna_ed
+        self.cena_netna_ed = self.cena_brutna_ed / Decimal(1 + self.dds / 100)
+        self.cena_netna_total = self.cena_netna_ed * self.kol
+        self.dds_suma = self.total - self.cena_netna_total
+        if not self.pk:
+            current_fak = FakModels.objects.get(fak_number=self.fak_id.fak_number)
+            current_fak.suma += self.total
+            current_fak.dds = self.dds
+            current_fak.cena_netna_total += self.cena_netna_total
+            current_fak.dds_suma += self.dds_suma
+            current_fak.save()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.fak_id.fak_number};{self.text};{self.cena_netna_ed};{self.dds};{self.dds_suma};{self.total}"

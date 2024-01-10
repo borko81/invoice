@@ -1,6 +1,5 @@
-Models: Fak
-Models: Fak_el
-Create: Fak views
+Справки: фактури. Search, от дата до дата
+Редакция фактура, данни
 TEST: Fak
 
 Create: Spravi views

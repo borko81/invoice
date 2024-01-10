@@ -2,6 +2,7 @@ from django.urls import path
 from . import views as app_views
 from . import views_owner as owner_views
 from . import views_clients as clients_views
+from . import views_fak as fak_views
 
 app_name = "fak_owner"
 urlpatterns = [
@@ -35,4 +36,7 @@ urlpatterns = [
         clients_views.parse_bulstat,
         name="bulstat_parse",
     ),
+    # Fak url's
+    path("new_invoice/", fak_views.new_invoice, name="new_invoice"),
+    path("invoices/", fak_views.invoices, name="invoices"),
 ]

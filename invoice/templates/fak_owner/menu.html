@@ -6,10 +6,10 @@
                     <a class="nav-link" href="{% url 'base_template' %}">Home</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Нова фактура</a>
+                    <a class="nav-link" href="{% url 'fak_owner:new_invoice' %}">Нова фактура</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Справки фактури</a>
+                    <a class="nav-link" href="{% url 'fak_owner:invoices' %}">Справки фактури</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
