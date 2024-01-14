@@ -1,0 +1,60 @@
+<table class="table">
+    <thead class="table-dark">
+        <tr>
+            <th>
+                <input type="text" placeholder="No:"
+                _ = "on input show <tr /> in <tbody /> when its textContent.toLowerCase() 
+                contains my value.toLowerCase()"
+                >
+            </th>
+            <th>Тип</th>
+            <th>Плащане</th>
+            <th>ДДС</th>
+            <th>Клиент</th>
+            <th>Нетна сума</th>
+            <th>ДДС сума</th>
+            <th>Total</th>
+            <th>Падеж</th>
+            <th>Статус</th>
+            <th>Дата сделка</th>
+            <th>Дата издаване</th>
+            <th colspan="3">Операции</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for invoice in invoices %}
+            <tr class="{{invoice.is_deleted}}">
+                <td>{{invoice.fak_number}}</td>
+                <td>{{invoice.fak_tip}}</td>
+                <td>{{invoice.pay_tip}}</td>
+                <td>{{invoice.dds}}</td>
+                <td>{{invoice.client.client_name}}</td>
+                <td>{{invoice.cena_netna_total}}</td>
+                <td>{{invoice.dds_suma}}</td>
+                <td>{{invoice.suma}}</td>
+                <td>{{invoice.due_date}}</td>
+                <td>{{invoice.status}}</td>
+                <td>{{invoice.date_sdelka|date:"d.m.Y"}}</td>
+                <td>{{invoice.date_created|date:"d.m.Y"}}</td>
+                <td>
+                    <a href="{% url 'fak_owner:edit_invoice' invoice.fak_number %}" class="btn btn-sm btn-success">Edit</a>
+                </td>
+                <td>
+                    </a>
+                    <span class="badge badge-danger rounded-circle" style="cursor:pointer"
+                    hx-delete="{% url 'fak_owner:delete_invoice' invoice.fak_number %}"
+                    hx-confirm="Потвърдете изтриването!"
+                    hx-target=".custom_container"
+                    hx-swap="outerHTML"
+                    >
+                    X
+                    </span>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-info" href="{% url 'fak_owner:show_invoice' invoice.id %}" target="_blank">Покажи</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

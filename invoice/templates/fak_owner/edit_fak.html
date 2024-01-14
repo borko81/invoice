@@ -1,0 +1,36 @@
+{% extends 'fak_owner/base.html' %}
+
+{% block css %}
+<style>
+    .form {
+        width: 100%;
+        margin: 0 auto;
+    }
+    .form_label_and_input > div {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+    .form_label_and_input > label {
+        flex: 1;
+    }
+    .form_label_and_input > input, select {
+        flex: 2;
+    }
+    .action_butons {
+        display: grid;
+        gap: 5px;
+        grid-template-columns: 1fr 1fr;
+    }
+
+</style>
+{% endblock css %}
+
+
+{% block body %}
+
+<div id="edit_fak_id">
+{% include 'fak_owner/placeholder_edit_fakt_element.html' %}
+</div>
+
+{% endblock body %}

@@ -39,4 +39,12 @@ urlpatterns = [
     # Fak url's
     path("new_invoice/", fak_views.new_invoice, name="new_invoice"),
     path("invoices/", fak_views.invoices, name="invoices"),
+    path("invoice/<str:id_>/", fak_views.edit_invoice, name="edit_invoice"),
+    path("invoice/show/<int:id_>/", fak_views.show_invoice, name="show_invoice"),
+    path(
+        "invoice/product_row_delete/<str:id_>/",
+        fak_views.delete_product_row,
+        name="delete_product_row",
+    ),
+    path("invoice/delete/<str:id_>/", fak_views.delete_fak, name="delete_invoice"),
 ]

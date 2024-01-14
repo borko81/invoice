@@ -1,5 +1,8 @@
 from django.db import models
 
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
+
 from decimal import Decimal
 from datetime import datetime
 
@@ -66,6 +69,7 @@ class Owner(models.Model):
     id_nomer = models.CharField(max_length=11, blank=True, null=True)
     url = models.EmailField(blank=True, null=True)
     image = models.ImageField(default="default.jpg", upload_to="owner_picture")
+    mol = models.CharField(max_length=120)
 
     def save(self, *args, **kwargs):
         if not self.pk and Owner.objects.exists():
@@ -128,6 +132,7 @@ class FakModels(models.Model):
     date_sdelka = models.DateField(auto_now_add=False)
     date_created = models.DateField(blank=True, null=True)
     comment = models.CharField(max_length=120, blank=True, null=True)
+    is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.fak_number)
@@ -181,3 +186,12 @@ class FakElModels(models.Model):
 
     def __str__(self):
         return f"{self.fak_id.fak_number};{self.text};{self.cena_netna_ed};{self.dds};{self.dds_suma};{self.total}"
+
+
+@receiver(post_delete, sender=FakElModels)
+def model_delete(sender, instance, **kwargs):
+    current_fak = FakModels.objects.get(fak_number=instance.fak_id.fak_number)
+    current_fak.suma -= instance.total
+    current_fak.cena_netna_total -= instance.cena_netna_total
+    current_fak.dds_suma -= instance.dds_suma
+    current_fak.save()

@@ -1,0 +1,72 @@
+<form action="" method="POST" class="form">
+    {% csrf_token %}
+    <div class="form_label_and_input">
+    {{fak_form}}
+    <table class="table mt-2">
+        <thead class="table-dark">
+            <tr class="product_input">
+                <th></th>
+                <th>Продукт</th>
+                
+                <th style="width: 5px">Кол</th>
+                <th>ДДС</th>
+                <th>Ед.Цена Брутна</th>
+                <th colspan="2">Операции</th>
+            </tr>
+        </thead>
+        <tbody id="fak_form_products">
+
+        
+        {% for product in fak_elemets %}
+            <tr class="product_input">
+                <td>
+                    <input type="hidden" name="product_id" value="{{product.id}}">
+                </td>
+                <td>
+                    <input type="text" name="text" maxlength="52" required="" id="id_text" value="{{product.text}}">
+                </td>
+                <td>
+                    <input type="number" name="kol" min="0" required="" id="id_kol" value="{{product.kol}}">
+                </td>
+                <td>
+                    <select name="dds" id="id_dds" value="{{product.dds}}">
+                        <option value="0">0</option>
+                      
+                        <option value="9">9</option>
+                      
+                        <option value="20" selected="">20</option>
+                      
+                      </select>
+                </td>
+                <td>
+                    <input type="number" name="cena_brutna_ed" value="{{product.cena_brutna_ed}}" step="0.01" required="" id="id_cena_brutna_ed">
+                </td>
+                <td>
+                    <a href="" class="btn btn-sm btn-success">Редакция ред</a>
+                </td>
+                <td>
+                    <span class="badge badge-danger rounded-circle" style="cursor:pointer"
+                    hx-delete="{% url 'fak_owner:delete_product_row' product.id %}"
+                    hx-target=".custom_container"
+                    hx-swap="outerHTML"
+                    hx-confirm="Потвърдете изтриването!"
+                    >
+                        X
+                    </span>
+                </td>
+            </tr>
+        {% endfor %}
+
+    </tbody>
+    </table>
+    <!-- {{produkt_form}} -->
+    </div>
+    <div class="action_butons">
+
+        <button id="add_new_row" class="btn btn-sm btn-success mb-2">Добави ред</button>
+
+        <button id="remove_last_row" class="btn btn-sm btn-danger mb-2">Премахни ред</button>
+
+    </div>
+        <input type="submit" value="Запис" class="btn btn-sm btn-success form-control">
+</form>

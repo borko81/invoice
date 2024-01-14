@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Invoice: {{title}}</title>
+	<style>
+		.faktura {
+			border: 1px solid black;
+			width: 60%;
+			height: 90vh;
+			margin: 0 auto;
+			display: flex;
+			flex-direction: column;
+		}
+		.faktura_header {
+			height: 25vh;
+		}
+		.faktura_main {
+			height: 50vh;
+		}
+		.faktura_footer {
+			display: flex;
+			height: 15vh;
+			position: relativee;
+			bottom: 0;
+			margin: 5px;
+		}
+		.faktura_footer > .info_one {
+			flex: 1 1;
+		}
+		.faktura_footer > .info_two {
+			flex: 1 1;
+		}
+		.info_one > label {
+			text-align: left;
+		}
+		.info_two > label {
+			text-align: left;
+		}
+		.form-row > select {
+		    flex: 2;
+		}
+		.faktura_header {
+			display: flex;
+			justify-content: space-between;
+		}
+
+		.obal_div {
+			margin-top: 5px;
+			padding: 5px;
+			border: 1px solid black;
+			border-radius: 15px;
+			width: 31%;
+		}
+		.wrapper {
+		    list-style-type: none;
+		    padding: 0;
+		    border-radius: 3px;
+		    width: 100%;
+		    margin: 0 auto;
+		}
+		.form-row {
+		    display: flex;
+		    justify-content: flex-end;
+		}
+		.form-row > input {
+		    flex: 2;
+		   	border: none;
+		   	outline:0;
+		   	border-bottom: 1px dashed;
+		}
+		.form-row > select {
+		    flex: 2;
+		   	border: none;
+		   	outline:0;
+		   	border-bottom: 1px dashed;
+		}
+		.form-row > label {
+		    flex: 1;
+		    text-align: right;
+		    margin-right: 7px;
+		    outline:0;
+		}
+		.client_data{
+			margin-left: 5px;
+		}
+		.supplier_data {
+			margin-right: 5px;
+		}
+		img {
+			max-width: 150px;
+			height: 150px;
+		}
+		.logo_data {
+			display: flex;
+		}
+		.h3-outline {
+			outline: 0;
+			margin: 10px 0;
+		}
+		.text-align-left {
+			text-align: left;
+		}
+		.full_table_width {
+			width: 100%;
+		}
+		.full_table_width th, td {
+			text-align: left;
+		}
+		@media print {
+		    .faktura{
+		        width: 21cm;
+		        height: 29.7cm;
+/*		        margin: 30mm 45mm 30mm 45mm; */
+		        /* change the margins as you want them to be. */
+		   } 
+		}
+	</style>
+</head>
+<body>
+	<div class="faktura">
+		<div class="faktura_header">
+			<div class="client_data obal_div">
+				<h3 class="h3-outline">Клиент</h3>
+				<form method="POST">
+				    <ul class="wrapper">
+			            <li class="form-row">
+			                <label for="">Клиент</label>
+			                <input type="text" value="{{client.client_name}}">
+			            </li>
+			            <li class="form-row">
+			                <label for="">Град</label>
+			                <input type="text" value="{{owner.town}}">
+			            </li>
+			            <li class="form-row">
+			                <label for="">Адрес</label>
+			                <input type="text" value="{{owner.address}}">
+			            </li>
+			            <li class="form-row">
+			                <label for="">ЕИК</label>
+			                <input type="text" value="{{owner.bulstat}}">
+			            </li>
+			            <li class="form-row">
+			                <label for="">ЗДДС</label>
+			                <input type="text" value="{{owner.id_nomer}}">
+			            </li>
+			            <li class="form-row">
+			                <label for="">Мол</label>
+			                <input type="text" value="{{owner.mol}}">
+			            </li>
+				    </ul>
+				</form>
+			</div>
+			<div class="logo_data obal_div">
+				<img src="
+				data:image/png;base64,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
+				" alt="">
+				<div class="fak_danni">
+					<h3>{{current_invoice.fak_tip}}</h3>
+					<p>Номер: {{current_invoice.fak_number}}</p>
+					<p>Издадена на: {{current_invoice.date_created|date:"d.m.Y"}}</p>
+				</div>
+
+			</div>
+			<div class="supplier_data obal_div">
+				<h3 class="h3-outline">Доставчик</h3>
+				<form method="POST">
+				    <ul class="wrapper">
+			            <li class="form-row">
+			                <label for="">Клиент</label>
+			                <input type="text" value="{{owner.full_name}}">
+			            </li>
+			            <li class="form-row">
+			                <label for="">Град</label>
+			                <input type="text" value="{{owner.town}}">
+			            </li>
+			            <li class="form-row">
+			                <label for="">Адрес</label>
+			                <input type="text" value="{{owner.address}}">
+			            </li>
+			            <li class="form-row">
+			                <label for="">ЕИК</label>
+			                <input type="text" value="{{owner.bulstat}}">
+			            </li>
+			            <li class="form-row">
+			                <label for="">ЗДДС</label>
+			                <input type="text" value="{{owner.id_nomer}}">
+			            </li>
+			            <li class="form-row">
+			                <label for="">Мол</label>
+			                <input type="text" value="{{owner.mol}}">
+			            </li>
+						<li class="form-row">
+			                <label for="">Банка</label>
+			                <input type="text" value="{{owner.owner_banka.banka_name}}">
+			            </li>
+						<li class="form-row">
+			                <label for="">IBAN</label>
+			                <input type="text" value="{{owner.owner_banka.smetka}}">
+			            </li>
+						<li class="form-row">
+			                <label for="">BIC</label>
+			                <input type="text" value="{{owner.owner_banka.kod}}">
+			            </li>
+				    </ul>
+				</form>
+			</div>
+		</div>
+		<div class="faktura_main">
+			<table class="full_table_width">
+				<thead>
+					<tr>
+						<th>Наименование</th>
+						<th>Мярка</th>
+						<th>Количество</th>
+						<th>ДДС</th>
+						<th>Ед. цена</th>
+						<th>Цена</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for product in products %}
+					<tr>
+						<td>{{product.text}}</td>
+						<td>бр.</td>
+						<td>{{product.kol}}</td>
+						<td>{{product.dds}}</td>
+						<td>{{product.cena_netna_ed}}</td>
+						<td>{{product.cena_netna_total}}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<div class="faktura_footer">
+			<div class="obal_div info_one">
+			<form method="POST">
+			    <ul class="wrapper">
+		            <li class="form-row">
+		                <label for="" style="text-align: left">Данъчно събитие</label>
+		                <input type="text" value='{{current_invoice.date_sdelka|date:"d.m.Y"}}'>
+		            </li>
+		            <li class="form-row">
+		                <label for="" style="text-align: left">Валута</label>
+		                <input type="text" value="BGN">
+		            </li>
+		            <li class="form-row">
+		                <label for="" style="text-align: left">Получател</label>
+		                <input type="text">
+		            </li>
+		            <li class="form-row">
+		                <label for="" style="text-align: left">Подпис</label>
+		                <input type="text">
+		            </li>
+				</ul>
+			</form>
+			</div>
+			<div class="obal_div info_two">
+			<form method="POST">
+			    <ul class="wrapper">
+		            <li class="form-row">
+		                <label for="" style="text-align: left">Място на сделката</label>
+		                <input type="text" value="Велинград">
+		            </li>
+		            <li class="form-row">
+		                <label for="" style="text-align: left">Плащане</label>
+		                <input type="text" value="{{current_invoice.pay_tip}}">
+		            </li>
+		            <li class="form-row">
+		                <label for="" style="text-align: left">Съставил</label>
+		                <input type="text">
+		            </li>
+		            <li class="form-row">
+		                <label for="" style="text-align: left">Подпис</label>
+		                <input type="text">
+		            </li>
+				</ul>
+			</form>	
+			</div>
+		</div>
+	</div>
+</body>
+</html>
