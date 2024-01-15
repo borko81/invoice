@@ -1,11 +1,12 @@
 Редакция фактура, данни (добавя ред?)
-Генериране на шаблона за фактура от разглежда фактура!
 
 
 Create: Spravi views, search, от дата до дата
 
-Create: Download Spravi, pdf (цяла), csv само данно.
+Create: Download Spravi, pdf (цяла), csv само данни.
 
 Created new invoice, update poluchena ot from client parse! Това не ми се струва нужно?
 
 TEST: Fak, FakProduct
+
+Create Login form, user that login show in fak created.

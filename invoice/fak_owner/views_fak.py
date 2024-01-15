@@ -3,6 +3,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.models import User
 from decimal import Decimal
 
 from . import models
@@ -122,5 +123,6 @@ def show_invoice(request, id_):
         "owner": owner,
         "client": client,
         "products": products,
+        "user": User.objects.get(id=1),
     }
     return render(request, "fak_owner/show_invoice.html", content)

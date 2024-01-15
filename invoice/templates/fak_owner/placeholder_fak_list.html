@@ -41,15 +41,14 @@
                     <a href="{% url 'fak_owner:edit_invoice' invoice.fak_number %}" class="btn btn-sm btn-success">Edit</a>
                 </td>
                 <td>
-                    </a>
-                    <span class="badge badge-danger rounded-circle" style="cursor:pointer"
+                    <button class="btn btn-sm btn-danger" style="cursor:pointer"
                     hx-delete="{% url 'fak_owner:delete_invoice' invoice.fak_number %}"
                     hx-confirm="Потвърдете изтриването!"
                     hx-target=".custom_container"
                     hx-swap="outerHTML"
                     >
                     X
-                    </span>
+                </button>
                 </td>
                 <td>
                     <a class="btn btn-sm btn-info" href="{% url 'fak_owner:show_invoice' invoice.id %}" target="_blank">Покажи</a>
