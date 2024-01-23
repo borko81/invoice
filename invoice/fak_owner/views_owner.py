@@ -2,12 +2,13 @@ from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from . import models
 from . import forms
 
 
-class OwnerView(ListView):
+class OwnerView(LoginRequiredMixin, ListView):
     template_name = "fak_owner/owner.html"
     model = models.Owner
 
@@ -17,7 +18,7 @@ class OwnerView(ListView):
         return context
 
 
-class OwnerNew(CreateView):
+class OwnerNew(LoginRequiredMixin, CreateView):
     template_name = "fak_owner/owner.html"
     model = models.Owner
     form_class = forms.OwnerForm
@@ -33,7 +34,7 @@ class OwnerNew(CreateView):
         return reverse("fak_owner:owner")
 
 
-class OwnerEdit(UpdateView):
+class OwnerEdit(LoginRequiredMixin, UpdateView):
     template_name = "fak_owner/owner.html"
     model = models.Owner
     form_class = forms.OwnerForm
@@ -49,7 +50,7 @@ class OwnerEdit(UpdateView):
         return reverse("fak_owner:owner")
 
 
-class OwnerDelete(DeleteView):
+class OwnerDelete(LoginRequiredMixin, DeleteView):
     template_name = "fak_owner/owner.html"
     model = models.Owner
     # success_url = reverse_lazy("fak_owner:owner")

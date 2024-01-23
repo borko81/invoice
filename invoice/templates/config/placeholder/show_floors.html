@@ -1,0 +1,33 @@
+<table class="table mt-2">
+    <thead class="table-dark">
+      <tr>
+        <th>Име</th>
+        <th>Общо стаи на етажа</th>
+        <th colspan="2">Опции</th>
+        <th><button class="btn btn-sm btn-success" data-toggle="modal" data-target="#exampleModal">Нов запис</button></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for floor in all_floors %}
+        <tr>
+        <td>{{floor.name}}</td>
+        <td>{{floor.floors.all.count}}</td>
+        <td>
+        <a href="{% url 'hotel:edit_floor' floor.id %}" class="btn btn-sm btn-success">
+        Edit
+        </a>
+        </td>
+        <td>
+        <button class="btn btn-sm btn-danger"
+        hx-get="{% url 'hotel:delete_floor' floor.id %}"
+        hx-target="#main_target"
+        hx-swap="outerHTML"
+        hx-confirm="Are you sure to delte this record?"
+        >
+        Delete</button>
+        </td>
+          <td></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>

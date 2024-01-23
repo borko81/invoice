@@ -2,13 +2,14 @@ from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from . import models
 from . import forms
 
 
 # Bank account create, update, delete and list
-class OwnerBankListView(ListView):
+class OwnerBankListView(LoginRequiredMixin, ListView):
     template_name = "fak_owner/ownerbank_list.html"
     model = models.OwnerBank
 
@@ -18,7 +19,7 @@ class OwnerBankListView(ListView):
         return context
 
 
-class OwnerBanNew(CreateView):
+class OwnerBanNew(LoginRequiredMixin, CreateView):
     template_name = "fak_owner/ownerbank_list.html"
     model = models.OwnerBank
     form_class = forms.OwnerBankForm
@@ -34,7 +35,7 @@ class OwnerBanNew(CreateView):
         return reverse("fak_owner:bank_list")
 
 
-class OwnerBankEdit(UpdateView):
+class OwnerBankEdit(LoginRequiredMixin, UpdateView):
     template_name = "fak_owner/ownerbank_list.html"
     model = models.OwnerBank
     form_class = forms.OwnerBankForm
@@ -50,7 +51,7 @@ class OwnerBankEdit(UpdateView):
         return context
 
 
-class OwnerBankDelete(DeleteView):
+class OwnerBankDelete(LoginRequiredMixin, DeleteView):
     template_name = "fak_owner/ownerbank_list.html"
     model = models.OwnerBank
 

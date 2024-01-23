@@ -1,0 +1,29 @@
+{% extends 'fak_owner/base.html' %}
+
+{% block body %}
+
+  {% include 'config/placeholder/show_floors.html' %}
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Нов Запис</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'hotel:new_floor' %}" method="POST">
+          {% csrf_token %}
+          <input type="text" placeholder="Enter new floor" name="name">
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock body %}

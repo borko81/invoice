@@ -1,0 +1,30 @@
+<table class="table mt-2">
+    <thead class="table-dark">
+      <tr>
+        <th>Име</th>
+        <th>Възраст</th>
+        <th>Допълнително</th>
+        <th>В Група</th>
+        <th colspan="2">Опции</th>
+        <th><button class="btn btn-sm btn-success" data-toggle="modal" data-target="#exampleModal">Нов запис</button></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for bed in all_beds %}
+        <tr>
+          <td>{{bed.name}}</td>
+          <td>{{bed.age}}</td>
+          <td>{{bed.dop_bed}}</td>   
+          <td>{{bed.usl_group}}</td>
+          <td><button class="btn btn-sm btn-success">Edit</button></td>
+          <td><button class="btn btn-sm btn-danger"
+          hx-post="{% url 'hotel:delete_bed' bed.id %}"
+          hx-target="#main_target"
+          hx-swap="outerHTML"
+          hx-confirm="Are you sure to delte this record?" 
+          >Delete</button></td>
+          <td></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>

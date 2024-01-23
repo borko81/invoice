@@ -7,8 +7,12 @@ from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("accounts/", include("django.contrib.auth.urls")),
+    path("logout/", views.logout_view, name="custom_logout"),
     path("", views.check_base, name="base_template"),
     path("", include("fak_owner.urls")),
+    path("config/", include("hotel_config.urls")),
+    path("nast/", include("nast_config.urls")),
 ]
 
 if settings.DEBUG:

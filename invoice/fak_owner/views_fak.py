@@ -4,12 +4,14 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from decimal import Decimal
 
 from . import models
 from . import forms
 
 
+@login_required
 def new_invoice(request):
     content = {
         "fak_form": forms.FakModelsForm(request.POST or None),
@@ -52,12 +54,14 @@ def new_invoice(request):
         return HttpResponse(request.POST)
 
 
+@login_required
 def invoices(request):
     content = {"invoices": models.FakModels.objects.all()}
     if request.method == "GET":
         return render(request, "fak_owner/fak_lists.html", content)
 
 
+@login_required
 def delete_fak(request, id_):
     fak = get_object_or_404(models.FakModels, fak_number=id_)
     fak.is_deleted = True
@@ -66,6 +70,7 @@ def delete_fak(request, id_):
     return render(request, "fak_owner/fak_lists.html", content)
 
 
+@login_required
 def edit_invoice(request, id_: str):
     temp_fak_id = models.FakModels.objects.get(fak_number=id_)
     temp_fak_elements = models.FakElModels.objects.filter(fak_id=temp_fak_id)
@@ -91,6 +96,7 @@ def edit_invoice(request, id_: str):
     return HttpResponse(request.POST)
 
 
+@login_required
 def delete_product_row(request, id_):
     if request.method == "DELETE":
         product_row = get_object_or_404(models.FakElModels, id=int(id_))
@@ -112,6 +118,7 @@ def delete_product_row(request, id_):
         return render(request, "fak_owner/edit_fak.html", content)
 
 
+@login_required
 def show_invoice(request, id_):
     current_invoice = get_object_or_404(models.FakModels, id=id_)
     owner = models.Owner.objects.all()[0]

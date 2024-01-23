@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.http import JsonResponse, HttpResponse
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from . import models
 from . import forms
@@ -10,7 +11,7 @@ from . import forms
 from .helpers.bulstat_parse import GetDataFromBulstat
 
 
-class ViewAllClients(ListView):
+class ViewAllClients(LoginRequiredMixin, ListView):
     model = models.Client
     template_name = "fak_owner/clients.html"
 
@@ -29,7 +30,7 @@ class ViewAllClients(ListView):
         return queryset
 
 
-class ClientNew(CreateView):
+class ClientNew(LoginRequiredMixin, CreateView):
     model = models.Client
     template_name = "fak_owner/clients.html"
     form_class = forms.ClientForm
@@ -45,7 +46,7 @@ class ClientNew(CreateView):
         return reverse("fak_owner:clients")
 
 
-class ClientEdit(UpdateView):
+class ClientEdit(LoginRequiredMixin, UpdateView):
     model = models.Client
     template_name = "fak_owner/clients.html"
     form_class = forms.ClientForm
@@ -61,7 +62,7 @@ class ClientEdit(UpdateView):
         return reverse("fak_owner:clients")
 
 
-class ClientDelete(DeleteView):
+class ClientDelete(LoginRequiredMixin, DeleteView):
     model = models.Client
     template_name = "fak_owner/clients.html"
 

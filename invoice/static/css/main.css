@@ -1,3 +1,7 @@
+:root {
+    --href_color: #fff;
+}
+
 .custom_container {
     width: 80%;
     margin: 0 auto;
@@ -51,4 +55,15 @@
 .custom_two_layer_button {
     display: flex;
     justify-content: space-between;
+}
+
+.custom_a_class {
+    color: var(--href_color);
+}
+
+.custom_a_class:hover {
+    color: var(--href_color);
+    text-decoration: none;
+    border-top: 1px solid var(--href_color); 
+    border-bottom: 1px solid var(--href_color); 
 }

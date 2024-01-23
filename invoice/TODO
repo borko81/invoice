@@ -1,3 +1,26 @@
+# hotel_config
+models:
+    +floor:
+        -Try htmx to edit record inline without outerHTML?
+        -Tests
+    -roomtypes
+    -rooms
+    --food
+    --beds
+    --uslgroup
+    --usl
+    beds_price
+
+# repairs
+models:
+    repairs
+
+# nast_config
+models:
+    person_info
+    nast: when...
+
+
 Редакция фактура, данни (добавя ред?)
 
 
@@ -9,4 +32,4 @@ Created new invoice, update poluchena ot from client parse! Това не ми �
 
 TEST: Fak, FakProduct
 
-Create Login form, user that login show in fak created.
+

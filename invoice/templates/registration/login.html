@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: 60%;
+            margin: 20px auto;
+        }
+  
+        form {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            margin: 0 auto;
+        }
+        form > div {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        input {
+            order: 2;
+            width: 60%;
+            margin: 10px auto;
+            border: none;
+            border-bottom: 1px solid black;
+            background-color: white !important;
+        }
+        label {
+            order: 1;
+            width: 10%;
+            margin: 10px auto;
+            padding: 0;
+            text-align: right; 
+            border: none;
+        }
+        input:focus {
+            outline: none;
+            &:custom_label {
+                color: red;
+            }
+        }
+        button {
+            width: 90%;
+            margin: 10px auto;
+            background-color: rgb(22, 235, 164);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div>
+            <h2>Log In</h2>
+        </div>
+        <form method="post" autocomplete="off">
+        {% csrf_token %}
+        {% for field in form %}
+            <div>
+                <label for="">{{field.label}}</label>
+                {{field}}
+            </div>
+        {% endfor %}
+ 
+                <button type="submit" class="btn btn-sm btn-success">Log In</button>
+
+        
+        </form>
+    </div>
+</body>
+</html>
