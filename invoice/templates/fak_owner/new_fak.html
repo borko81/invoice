@@ -28,11 +28,16 @@
 
 
 {% block body %}
-<h3>Нова фактура</h3>
+<div class="d-flex justify-content-between">
+    <h3>Нова фактура</h3><button id="show_hideme" class="btn btn-sm btn-success mt-2">Скрии/покажи основни данни</button>
+</div>
+<!-- forma -->
 <form action="" method="POST" class="form">
     {% csrf_token %}
     <div class="form_label_and_input">
-    {{fak_form}}
+        <div class="form_label_and_input" id="common_data">
+            {{fak_form}}
+        </div>
     <table class="table mt-2">
         <thead class="table-dark">
             <tr class="product_input">
@@ -40,16 +45,20 @@
                 <th style="width: 5px">Кол</th>
                 <th>ДДС</th>
                 <th>Ед.Цена Брутна</th>
+                <th>Тотал</th>
             </tr>
         </thead>
+
         <tbody id="fak_form_products">
         <tr class="product_input">
             {% for product in produkt_form %}
                 <td>{{product}}</td>
             {% endfor %}
+                <td id="total_suma"></td>
         </tr>
-    </tbody>
+        </tbody>
     </table>
+
     <!-- {{produkt_form}} -->
     </div>
     <div class="action_butons">
@@ -61,4 +70,26 @@
     </div>
         <input type="submit" value="Запис" class="btn btn-sm btn-success form-control">
 </form>
+
+<script>
+    let show_hide_button = document.querySelector("#show_hideme")
+    let x = document.querySelector("#common_data")
+    let total = document.querySelector("#total_suma")
+    let ed_price = document.querySelector("#id_cena_brutna_ed")
+    let id_kol = document.querySelector("#id_kol")
+
+    ed_price.addEventListener("change", function () {
+        // alert(`${ed_price.value} : ${total.innerHTML}`)
+       total.innerHTML += parseFloat(ed_price.value) * parseInt(id_kol.value)
+    })
+
+    show_hide_button.addEventListener("click", function () {
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else { 
+            x.style.display = "none";
+        }
+    })
+
+</script>
 {% endblock body %}

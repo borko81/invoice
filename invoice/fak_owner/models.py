@@ -43,16 +43,16 @@ class OwnerBank(models.Model):
     banka_name_lat = models.CharField(max_length=52, null=True, blank=True)
     kod = models.CharField(max_length=12)
     smetka = models.CharField(max_length=52)
-    last_fak_number = models.CharField(max_length=10, default="0")
-    last_pr_number = models.CharField(max_length=10, default="0")
+    # last_fak_number = models.CharField(max_length=10, default="0")
+    # last_pr_number = models.CharField(max_length=10, default="0")
 
     def __str__(self):
         return self.banka_name
 
-    def save(self, *args, **kwargs):
-        self.last_fak_number = self.last_fak_number.zfill(10)
-        self.last_pr_number = self.last_pr_number.zfill(10)
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     self.last_fak_number = self.last_fak_number.zfill(10)
+    #     self.last_pr_number = self.last_pr_number.zfill(10)
+    #     super().save(*args, **kwargs)
 
 
 class Owner(models.Model):
@@ -71,7 +71,12 @@ class Owner(models.Model):
     image = models.ImageField(default="default.jpg", upload_to="owner_picture")
     mol = models.CharField(max_length=120)
 
+    last_fak_number = models.CharField(max_length=10, default="0")
+    last_pr_number = models.CharField(max_length=10, default="0")
+
     def save(self, *args, **kwargs):
+        self.last_fak_number = self.last_fak_number.zfill(10)
+        self.last_pr_number = self.last_pr_number.zfill(10)
         if not self.pk and Owner.objects.exists():
             raise ValueError("This model has already its record.")
         super().save(*args, **kwargs)
@@ -117,11 +122,11 @@ class FakModels(models.Model):
     bank = models.ForeignKey(
         OwnerBank, on_delete=models.CASCADE, default=OwnerBank.DEFAULT_PK
     )
-    # owner =
+    owner = models.ForeignKey(Owner, default=1, on_delete=models.PROTECT)
     fak_number = models.CharField(max_length=10, blank=True, null=True)
     fak_tip = models.CharField(max_length=32, choices=FAK_TYPE, default="Фактура")
     pay_tip = models.CharField(max_length=32, choices=PAY_TIP, default="Брой")
-    client = models.ForeignKey(Client, on_delete=models.DO_NOTHING)
+    client = models.ForeignKey(Client, on_delete=models.PROTECT)
     suma = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     dds = models.IntegerField(choices=DDS, default=20)
     cena_netna_total = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
@@ -141,13 +146,13 @@ class FakModels(models.Model):
         self.bank_name = self.bank
         if not self.pk:
             if self.fak_tip == "Фактура" or self.fak_tip == "Кредитно известие":
-                self.fak_number = str(int(self.bank_name.last_fak_number) + 1).zfill(10)
-                self.bank_name.last_fak_number = self.fak_number
-                self.bank.save()
+                self.fak_number = str(int(self.owner.last_fak_number) + 1).zfill(10)
+                self.owner.last_fak_number = self.fak_number
+                self.owner.save()
             elif self.fak_tip == "Проформа":
-                self.fak_number = str(int(self.bank_name.last_pr_number) + 1).zfill(10)
-                self.bank_name.last_pr_number = self.fak_number
-                self.bank.save()
+                self.fak_number = str(int(self.owner.last_pr_number) + 1).zfill(10)
+                self.owner.last_pr_number = self.fak_number
+                self.owner.save()
         self.date_created = datetime.now()
         super().save(*args, **kwargs)
 
